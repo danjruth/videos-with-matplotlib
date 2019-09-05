@@ -31,6 +31,8 @@ class Timing:
     
     __call__ : get the index time given the scene time
     get_playback_rate : Calculate the playback rate at a given scene time
+    update_with_stime : update values with the Scene time
+    stime_to_time : convert a scene time to an index time
     '''
     
     def __init__(self):      
@@ -108,10 +110,10 @@ class LinearPlaybackDefinedSpeedAndDuration(Timing):
     def stime_to_time(self,stime):
         return self.start_time + (stime/self.sduration)*(self.end_time-self.start_time)
     
-class LogarithmicPlaybackDefinedSpeeds(Timing):
-    '''Logarithmic playback given the start and end times and 
-    '''
-    pass
+#class LogarithmicPlaybackDefinedSpeeds(Timing):
+#    '''Logarithmic playback given the start and end times and 
+#    '''
+#    pass
 
 class ReversedLogarithmicPlaybackDefinedDuration(Timing):
     def __init__(self,start_time,end_time,sduration):
@@ -162,11 +164,6 @@ class Scene:
                 - the index time at which to draw the Figure
                 - optionally, an instance of Timing, if the current scene time
                   or playback rate are required
-            
-        create_axs_func : callable.
-            Function to create all the axes used in the Scene. Must accept a
-            matplotlib Figure as an input and return a dict of matplotlib Axes
-            it has drawn on it.
             
         timing : Timing.
             Instance of the Timing class to control the timing for the Scene.
