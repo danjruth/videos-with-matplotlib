@@ -290,7 +290,9 @@ class Video:
     def write_images(self,directory,extension='.png'):
         '''Save each frame as an image in a directory.
         '''
+        print('Writing the images')
         n_digits = len(str(int(len(self.video_times))))
-        for fi,video_time in tqdm(enumerate(self.video_times),desc='writing the frames'):
+        #for fi,video_time in tqdm(enumerate(self.video_times),desc='writing the frames'):
+        for fi,video_time in enumerate(self.video_times):
             self(video_time)
-            fig.savefig(directory+'frame_'+str(fi).zfill(n_digits)+extension)
+            self.fig.savefig(directory+'frame_'+str(fi).zfill(n_digits)+extension)
