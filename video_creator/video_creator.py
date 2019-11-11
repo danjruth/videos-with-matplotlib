@@ -8,8 +8,8 @@ Created on Thu Aug 15 13:41:27 2019
 import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as manimation
-from tqdm import tqdm
 import copy
+import scipy.optimize
 
 class Timing:
     '''
@@ -66,6 +66,11 @@ class Timing:
         self.current_stime = stime
         self.current_indextime = self(stime)
         self.current_playback_rate = self.get_playback_rate(stime)
+        
+    def time_to_stime(self,time):
+        resid = lambda stime: (self(stime)-time)**2
+        res = scipy.optimize.minimize(resid,np.array([0]),bounds=[np.array([0,self.sduration])],tol=(1e-6)**2)
+        return res.x[0]
 
     
 '''
@@ -148,6 +153,112 @@ def combine_timings(timings_list):
     new_timing.stime_to_time = stime_to_time
     
     return new_timing
+
+class TimeScalerIxAndIx:
+    '''
+    Fader given the start and end indextimes of the fade.
+    '''
+    
+    def __init__(self,start_indextime,end_indextime,use_log=False):
+        self.start_indextime = start_indextime
+        self.end_indextime = end_indextime
+        self.use_log = use_log
+        
+    def __call__(self,timing):
+        indextime = timing.current_indextime
+        
+        # if it's after the fade has started
+        if indextime >= self.start_indextime:
+            
+            # if it's during the fade, calculate the value
+            if indextime < self.end_indextime:
+                if self.use_log:
+                    val = (np.log(self.end_indextime)-np.log(indextime)) / (np.log(self.end_indextime)-np.log(self.start_indextime))
+                else:
+                    val = (self.end_indextime-indextime) / (self.end_indextime-self.start_indextime)
+                    
+            # if it's after the fade ends, return 1
+            else:
+                val = 1
+         
+        # if it's befor the fade, return 0
+        else:
+            val = 0
+            
+        return val
+        
+class TimeScalerStartIxAndDuration:
+    '''
+    Fader given a start indextime and sceneduration. Trickier since the 
+    scenetime corresponding to the start_indextime is not known until it 
+    occurs.
+    '''
+    def __init__(self,start_indextime,duration_scenetime):
+        self.start_indextime = start_indextime
+        self.duration_scenetime = duration_scenetime
+        self.start_scenetime = np.nan
+        self.end_scenetime = np.nan
+    
+    def __call__(self,timing):
+        stime = timing.current_stime
+        
+        # now that we have a timing object, calculate the start and end scenetimes
+        if np.isnan(self.start_scenetime):
+            self.start_scenetime = timing.time_to_stime(self.start_indextime)
+            self.end_scenetime = self.start_scenetime+self.duration_scenetime
+        
+        # if it's after the fade has started
+        if stime >= self.start_scenetime:
+            
+            # if it's during the fade, calculate the value
+            if stime < self.end_scenetime:
+                val = (self.end_scenetime-stime) / self.sduration
+            
+            # if it's after the fade ends, return 1
+            else:
+                val = 1
+         
+        # if it's befor the fade, return 0
+        else:
+            val = 0
+            
+        return val
+    
+class TimeScalerDurationAndEndIx:
+    '''
+    Fader given a scene duration and ending index time.
+    '''
+    
+    def __init__(self,duration_scenetime,end_indextime):
+        self.duration_scenetime = duration_scenetime
+        self.end_indextime = end_indextime
+        self.start_scenetime = np.nan
+        self.end_scenetime = np.nan
+        
+    def __call__(self,timing):
+        stime = timing.current_stime
+        
+        # now that we have a timing object, calculate the start and end scenetimes
+        if np.isnan(self.start_scenetime):
+            self.end_scenetime = timing.time_to_stime(self.end_indextime)
+            self.start_scenetime = self.end_scenetime - self.duration_scenetime
+            
+        # if it's after the fade has started
+        if stime >= self.start_scenetime:
+            
+            # if it's during the fade, calculate the value
+            if stime < self.end_scenetime:
+                val = (self.end_scenetime-stime) / self.sduration
+            
+            # if it's after the fade ends, return 1
+            else:
+                val = 1
+         
+        # if it's befor the fade, return 0
+        else:
+            val = 0
+            
+        return val
 
 class Scene:
     '''
@@ -260,7 +371,8 @@ class Video:
         writer = copy.deepcopy(FFMpegWriter(fps=self.fps, metadata=metadata_dict))
         with writer.saving(self.fig, fpath_video, 100):
             #for video_time in tqdm(self.video_times,desc='writing the video file'):
-            for video_time in self.video_times:
+            for vti,video_time in enumerate(self.video_times):
+                print('Writing frame '+str(vti)+'/'+str(len(self.video_times))+'...')
                 self(video_time)
                 writer.grab_frame()
                 
