@@ -5,4 +5,7 @@ Created on Thu Aug 22 18:03:09 2019
 @author: user
 """
 
-from .video_creator import *
+from .timing import *
+from .fader import *
+from .scene import Scene
+from .video import Video
