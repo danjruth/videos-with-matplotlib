@@ -23,7 +23,7 @@ class Spin:
         The 3d axes to animate. Can be either just a single axes or a list of 
         axes.
     
-    period : float, or list of floats.
+    period : float.
         The period (in seconds) of each axes's rotation.
         
     azim_init : float, or list of floats.
@@ -31,7 +31,8 @@ class Spin:
         
     Methods
     ----------
-    write_video : save the animation as a video file.    
+    write_video : save the animation as a video file.
+    write_video : save the animation as a sequence of images.  
     '''
     
     def __init__(self,fig,ax,period=3,azim_init=0):
