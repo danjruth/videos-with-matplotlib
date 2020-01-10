@@ -9,3 +9,4 @@ from .timing import *
 from .fader import *
 from .scene import Scene
 from .video import Video
+from .spin import Spin
