@@ -43,14 +43,25 @@ class Spin:
         # make things lists if they're not already
         if type(self.ax) is not list:
             self.ax = [ax,]
-            self.period = [period,]
             self.azim_init = [azim_init,]
-    
-    def write_video(self,fpath_video,fps=30,metadata_dict=None):
-        
+            
+    def _compute_frame_times(self,fps):
+        '''calculate the times for each frame
+        '''        
         dt = 1./fps
         times = np.arange(0,self.period-dt,dt)
-        
+        return times
+    
+    def _update_axes(self,time):
+        '''update the azimuth on each axes given the time
+        '''        
+        for ax,azim_init in zip(self.ax,self.azim_init):
+            ax.azim = azim_init+time/self.period*360.
+    
+    def write_video(self,fpath_video,fps=30,metadata_dict=None):
+        '''Save the animation as a video file.
+        '''        
+        times = self._compute_frame_times(fps)        
         if metadata_dict is None:
             metadata_dict = {}
         
@@ -62,8 +73,16 @@ class Spin:
             # write each frame
             for ti,time in enumerate(times):
                 print('Writing frame '+str(ti)+'/'+str(len(times))+'...')
+                self._update_axes(time)
+                writer.grab_frame()
                 
-                # update the azimuth for each axes
-                for ax,period,azim_init in zip(self.ax,self.period,self.azim_init):
-                    ax.set_azim(azim_init+time/period*360.)
-                    writer.grab_frame()
+    def write_images(self,directory,fps=30,extension='.png'):
+        '''Save each frame as an image in a directory.
+        '''
+        print('Writing the images')
+        times = self._compute_frame_times(fps)
+        n_digits = len(str(int(len(times))))
+        for ti,time in enumerate(times):
+            print('Writing frame '+str(ti)+'/'+str(len(times))+'...')
+            self._update_axes(time)
+            self.fig.savefig(directory+'frame_'+str(ti).zfill(n_digits)+extension)
