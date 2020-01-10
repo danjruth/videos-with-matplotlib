@@ -32,7 +32,7 @@ class Spin:
     Methods
     ----------
     write_video : save the animation as a video file.
-    write_video : save the animation as a sequence of images.  
+    write_images : save the animation as a sequence of images.  
     '''
     
     def __init__(self,fig,ax,period=3,azim_init=0):
