@@ -29,17 +29,26 @@ class Spin:
     azim_init : float, or list of floats.
         The initial azimuth (in degrees) for each of the axes.
         
+    oscillate : bool.
+        If True, oscillates the azimuth sinusoidally instead of spinning the 
+        axes all the way around.
+        
+    oscillate_amplitude : float.
+        The amplitude (in degrees) of the oscillation, if oscillate is True.
+        
     Methods
     ----------
     write_video : save the animation as a video file.
     write_images : save the animation as a sequence of images.  
     '''
     
-    def __init__(self,fig,ax,period=3,azim_init=0):
+    def __init__(self,fig,ax,period=3,azim_init=-60,oscillate=False,oscillate_amplitude=45.):
         self.fig = fig
         self.ax = ax
         self.period = period
         self.azim_init = azim_init
+        self.oscillate = oscillate
+        self.oscillate_amplitude = oscillate_amplitude
         
         # make things lists if they're not already
         if type(self.ax) is not list:
@@ -55,9 +64,13 @@ class Spin:
     
     def _update_axes(self,time):
         '''update the azimuth on each axes given the time
-        '''        
+        '''
         for ax,azim_init in zip(self.ax,self.azim_init):
-            ax.azim = azim_init+time/self.period*360.
+            if self.oscillate == False:
+                ax.azim = azim_init+time/self.period*360.
+            if self.oscillate == True:
+                ax.azim =  azim_init + self.oscillate_amplitude * np.sin(time/self.period*2*np.pi)
+                print(ax.azim)
     
     def write_video(self,fpath_video,fps=30,metadata_dict=None):
         '''Save the animation as a video file.
