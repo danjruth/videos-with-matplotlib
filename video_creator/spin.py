@@ -29,13 +29,20 @@ class Spin:
     azim_init : float, or list of floats.
         The initial azimuth (in degrees) for each of the axes.
         
+    oscillate : bool.
+        If True, oscillates the azimuth sinusoidally instead of spinning the 
+        axes all the way around.
+        
+    oscillate_amplitude : float.
+        The amplitude (in degrees) of the oscillation, if oscillate is True.
+        
     Methods
     ----------
     write_video : save the animation as a video file.
     write_video : save the animation as a sequence of images.  
     '''
     
-    def __init__(self,fig,ax,period=3,azim_init=-60,oscillate=False,oscillate_amplitude=45):
+    def __init__(self,fig,ax,period=3,azim_init=-60,oscillate=False,oscillate_amplitude=45.):
         self.fig = fig
         self.ax = ax
         self.period = period
