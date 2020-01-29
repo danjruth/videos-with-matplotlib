@@ -70,7 +70,6 @@ class Spin:
                 ax.azim = azim_init+time/self.period*360.
             if self.oscillate == True:
                 ax.azim =  azim_init + self.oscillate_amplitude * np.sin(time/self.period*2*np.pi)
-                print(ax.azim)
     
     def write_video(self,fpath_video,fps=30,metadata_dict=None):
         '''Save the animation as a video file.
