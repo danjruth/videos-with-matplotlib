@@ -33,7 +33,8 @@ class Scene:
         '''
         
         # start from a clean slate: remove all the axes
-        [a.remove() for a in fig.axes]
+        #[a.remove() for a in fig.axes]
+        fig.clf()
         
         # draw on the axes
         self.draw_fig_func(ix_time,fig,timing=self.timing)
