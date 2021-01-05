@@ -68,3 +68,14 @@ fig = plt.figure(figsize=(9,6))
 video = Video([title_scene,main_scene],fig,fps=12)
 video.write_video(r'video.mp4')
 ```
+
+## Classes to control `Scene` playback timing
+
+The following classes are available to control the timing of a playback of a `Scene`, all in the `timing` module. Each is initialized with three of four parameters (index start time, index end time, playback speed, and scene duration).
+
+| Class  | Index time to playback time mapping | Index start time | Index end time | Playback speed | Scene duration |
+| ------------- | ------------- | :---: | :---: | :---: | :---: |
+| `LinearPlaybackDefinedSpeed`  | Linear  | X | X | X | |
+| `LinearPlaybackDefinedDuration`  | Linear  | X | X | | X |
+| `LinearPlaybackDefinedSpeedAndDuration`  | Linear  | X | | X | X |
+| `ReversedLogarithmicPlaybackDefinedDuration`  | Logarithmic  | X | X |  | X |
