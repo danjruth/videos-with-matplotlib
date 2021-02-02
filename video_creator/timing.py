@@ -117,14 +117,27 @@ class LinearPlaybackDefinedSpeedAndDuration(Timing):
 #    '''
 #    pass
 
-class ReversedLogarithmicPlaybackDefinedDuration(Timing):
+# class ReversedLogarithmicPlaybackDefinedDuration(Timing):
+#     def __init__(self,start_time,end_time,sduration):
+#         super().__init__()
+#         self.start_time = start_time
+#         self.end_time = end_time
+#         self.sduration = sduration        
+#     def stime_to_time(self,stime):        
+#         return 10**(np.log10(self.start_time)+stime/(self.sduration)*(np.log10(self.end_time)-np.log10(self.start_time)))
+    
+class LogarithmicPlaybackDefinedDuration(Timing):
+    '''Linear playback given a range of times and total scene duration.
+    '''    
     def __init__(self,start_time,end_time,sduration):
         super().__init__()
         self.start_time = start_time
         self.end_time = end_time
         self.sduration = sduration        
-    def stime_to_time(self,stime):        
+    def stime_to_time(self,stime):
         return 10**(np.log10(self.start_time)+stime/(self.sduration)*(np.log10(self.end_time)-np.log10(self.start_time)))
+    
+ReversedLogarithmicPlaybackDefinedDuration = LogarithmicPlaybackDefinedDuration
         
 '''
 ###############################################################################
