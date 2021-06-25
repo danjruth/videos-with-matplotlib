@@ -35,6 +35,10 @@ class Scene:
         # start from a clean slate: remove all the axes
         [a.remove() for a in fig.axes]
         
+        # remove texts drawn directly on the figure
+        for ti in range(len(fig.texts)):
+            del fig.texts[ti]
+        
         # draw on the axes
         self.draw_fig_func(ix_time,fig,timing=self.timing)
     
