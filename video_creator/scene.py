@@ -33,7 +33,8 @@ class Scene:
         '''
         
         # start from a clean slate: remove all the axes
-        [a.remove() for a in fig.axes]
+        #[a.remove() for a in fig.axes]
+        fig.clf()
         
         # remove texts drawn directly on the figure
         for ti in range(len(fig.texts)):
