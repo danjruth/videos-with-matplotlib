@@ -7,6 +7,10 @@ Created on Mon Nov 11 14:52:46 2019
 
 import numpy as np
 
+#class TimeScaler:
+    
+    
+
 class TimeScalerIxAndIx:
     '''
     Fader given the start and end indextimes of the fade.
@@ -28,7 +32,7 @@ class TimeScalerIxAndIx:
                 if self.use_log:
                     val = (np.log(self.end_indextime)-np.log(indextime)) / (np.log(self.end_indextime)-np.log(self.start_indextime))
                 else:
-                    val = (self.end_indextime-indextime) / (self.end_indextime-self.start_indextime)
+                    val = (indextime-self.start_indextime) / (self.end_indextime-self.start_indextime)
                     
             # if it's after the fade ends, return 1
             else:
@@ -65,7 +69,7 @@ class TimeScalerStartIxAndDuration:
             
             # if it's during the fade, calculate the value
             if stime < self.end_scenetime:
-                val = (self.end_scenetime-stime) / self.sduration
+                val = (stime-self.start_scenetime) / self.duration_scenetime
             
             # if it's after the fade ends, return 1
             else:
