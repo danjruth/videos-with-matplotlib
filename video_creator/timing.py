@@ -60,11 +60,17 @@ class Timing:
         return playback_rate
     
     def update_with_stime(self,stime):
+        '''Update the instance with the scene time (time, in seconds, into the
+        playback of the scene).
+        '''
         self.current_stime = stime
         self.current_indextime = self(stime)
         self.current_playback_rate = self.get_playback_rate(stime)
         
     def time_to_stime(self,time):
+        '''Compute the scenetime corresponding to an indextime using
+        scipy.optimize.minimize.
+        '''
         resid = lambda stime: (self(stime)-time)**2
         res = scipy.optimize.minimize(resid,np.array([0]),bounds=[np.array([0,self.sduration])],tol=(1e-6)**2)
         return res.x[0]
