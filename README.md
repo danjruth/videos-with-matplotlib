@@ -79,3 +79,7 @@ The following classes are available to control the timing of a playback of a `Sc
 | `LinearPlaybackDefinedDuration`  | Linear  | X | X | | X |
 | `LinearPlaybackDefinedSpeedAndDuration`  | Linear  | X | | X | X |
 | `ReversedLogarithmicPlaybackDefinedDuration`  | Logarithmic  | X | X |  | X |
+
+## Installation
+
+Download the code to your computer, then run `pip install -e .` .

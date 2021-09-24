@@ -6,14 +6,14 @@ Created on Mon Nov 11 14:53:45 2019
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 import matplotlib.animation as manimation
 import copy
 
 class Video:
     '''
     Organizes a collection of Scenes into a video and enables saving them as a
-    single video file.
+    single video file. "video time" designates the time, in seconds, into the 
+    playback of the video.
     '''
     
     def __init__(self,scenes,fig,fps=30):
@@ -24,7 +24,7 @@ class Video:
         scenes : list.
             A list of instances of the Scene class which comprimise the video.
             
-        fig : toolkit.display.Figure.
+        fig : matplotlib Figure
             The figure on which all the Scenes are drawn.
             
         fps : float.
