@@ -107,7 +107,7 @@ class LinearPlaybackDefinedSpeedAndDuration(Timing):
         self.start_time = start_time
         self.playback_speed = playback_speed
         self.sduration = sduration
-        duration = self.sduration/self.playback_speed
+        duration = self.sduration*self.playback_speed
         self.end_time = self.start_time+duration
     def stime_to_time(self,stime):
         return self.start_time + (stime/self.sduration)*(self.end_time-self.start_time)
