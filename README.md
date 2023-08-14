@@ -82,4 +82,6 @@ The following classes are available to control the timing of a playback of a `Sc
 
 ## Installation
 
-Download the code to your computer, then run `pip install -e .` .
+Download the code to your computer, then run `pip install -e .` .   
+
+
