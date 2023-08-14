@@ -70,7 +70,7 @@ class Video:
         scene,stime = self._scene_and_stime(video_time)
         scene.draw_at_stime(stime,self.fig)
         
-    def write_video(self,fpath_video,metadata_dict=None):
+    def write_video(self,fpath_video,metadata_dict=None,**writer_kwargs):
         '''Write the video to a single video file.
         '''
         if metadata_dict is None:
@@ -78,8 +78,9 @@ class Video:
         
         # create the writer for the video file
         FFMpegWriter = copy.deepcopy(manimation.writers['ffmpeg'])
-        writer = copy.deepcopy(FFMpegWriter(fps=self.fps, metadata=metadata_dict))
+        writer = copy.deepcopy(FFMpegWriter(fps=self.fps, metadata=metadata_dict, **writer_kwargs))
         with writer.saving(self.fig, fpath_video, dpi=self.fig.dpi):
+            print(writer.codec)
             #for video_time in tqdm(self.video_times,desc='writing the video file'):
             for vti,video_time in enumerate(self.video_times):
                 print('Writing frame '+str(vti)+'/'+str(len(self.video_times))+'...')
